@@ -23,7 +23,6 @@ const SignUp = () => {
       if (res.result !== null) {
         setLoading(false);
         navigate('/sign-in');
-
       }
     } catch (error) {
       setLoading(false);
