@@ -22,12 +22,16 @@ const SignIn = () => {
     try {
       const res = await signInAPI(formData);
       console.log(res);
-      if (res.result !== null) {
-        dispatch(signInSuccess(res.result));
-        navigate('/');
+
+      if (res.success === false) {
+        dispatch(signInFailed(res.message));
+        return;
       }
+      dispatch(signInSuccess(res.result));
+      navigate('/');
+
     } catch (error) {
-      dispatch(signInFailed('Cant not sign in'));
+      dispatch(signInFailed('Email or password is invalid'));
     }
 
 
