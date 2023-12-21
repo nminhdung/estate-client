@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { signInAPI } from '../apis';
+import { useDispatch, useSelector } from 'react-redux';
+import { signInPending, signInSuccess, signInFailed } from '../redux/user/userSlice';
 
 const SignIn = () => {
   const [formData, setFormData] = useState({});
-  const [loading, setLoading] = useState(false);
-  const [messError, setMessError] = useState('');
+  const { loading, error } = useSelector(state => state.user);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -16,17 +18,16 @@ const SignIn = () => {
   const handleSubmit = async (e) => {
     console.log(formData);
     e.preventDefault();
-    setLoading(true);
+    dispatch(signInPending());
     try {
       const res = await signInAPI(formData);
       console.log(res);
       if (res.result !== null) {
-        setLoading(false);
+        dispatch(signInSuccess(res.result));
         navigate('/');
       }
     } catch (error) {
-      setLoading(false);
-      setMessError('Can not signup with some problems');
+      dispatch(signInFailed('Cant not sign in'));
     }
 
 
@@ -50,7 +51,7 @@ const SignIn = () => {
           <span className="text-blue-700">Sign Up</span>
         </Link>
       </div>
-      {messError && <p className='text-red-500'>{messError}</p>}
+      {error && <p className='text-red-500'>{error}</p>}
     </div>
   );
 };
