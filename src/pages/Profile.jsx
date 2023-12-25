@@ -4,10 +4,13 @@ import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/
 import {
   updateUserPending,
   updateSuccess,
-  updateFailed
+  updateFailed,
+  deleteUserPending,
+  deleteSuccess,
+  deleteFailed
 } from '../redux/user/userSlice.js';
 import { app } from '../firebase';
-import { updateUserAPI } from '../apis/index.js';
+import { updateUserAPI, deleteUserAPI } from '../apis/index.js';
 
 
 const Profile = () => {
@@ -49,6 +52,20 @@ const Profile = () => {
   };
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
+  };
+  const handleDeleteUser = async () => {
+    try {
+      dispatch(deleteUserPending());
+      const res = await deleteUserAPI(currentUser._id);
+      if (res.success) {
+        dispatch(deleteSuccess());
+      } else {
+        dispatch(deleteFailed('Can not delete'));
+
+      }
+    } catch (error) {
+      dispatch(deleteFailed('Can not delete'));
+    }
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -124,7 +141,7 @@ const Profile = () => {
         </button>
       </form>
       <div className='flex items-center justify-between mt-5'>
-        <span className='text-red-600 cursor-pointer text-[16px]'>Delete Account?</span>
+        <span className='text-red-600 cursor-pointer text-[16px]' onClick={handleDeleteUser}>Delete Account?</span>
         <span className='text-red-600 cursor-pointer text-[16px]'>Sign out</span>
       </div>
       <p className='text-red-700 mt-5'>{error ? error : ''}</p>

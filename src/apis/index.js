@@ -34,3 +34,10 @@ export const updateUserAPI = async (userId, data) => {
   });
   return response.data;
 };
+export const deleteUserAPI = async (userId) => {
+  const response = await axiosIntansce({
+    url: `/user/delete/${userId}`,
+    method: 'delete'
+  });
+  return response.data;
+};
