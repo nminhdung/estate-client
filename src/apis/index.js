@@ -26,3 +26,11 @@ export const signInWithGoogleAPI = async (data) => {
   });
   return response.data;
 };
+export const updateUserAPI = async (userId, data) => {
+  const response = await axiosIntansce({
+    url: `/user/update/${userId}`,
+    method: 'put',
+    data
+  });
+  return response.data;
+};
