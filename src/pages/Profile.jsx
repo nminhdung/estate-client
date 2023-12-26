@@ -12,6 +12,7 @@ import {
   signOutSuccess,
   signOutFailed
 } from '../redux/user/userSlice.js';
+import { Link } from 'react-router-dom';
 import { app } from '../firebase';
 import { updateUserAPI, deleteUserAPI, signOutAPI } from '../apis/index.js';
 
@@ -151,6 +152,9 @@ const Profile = () => {
           className="bg-slate-700 text-white p-3 uppercase hover:opacity-95 disabled:opacity-80 rounded-lg">
           {loading ? 'Loading...' : 'Update'}
         </button>
+        <Link to={'/create-listing'} className="bg-green-700 text-white p-3 rounded-lg capitalize text-center hover:opacity-95">
+          Create Listing
+        </Link>
       </form>
       <div className='flex items-center justify-between mt-5'>
         <span className='text-red-600 cursor-pointer text-[16px]' onClick={handleDeleteUser}>Delete Account?</span>
