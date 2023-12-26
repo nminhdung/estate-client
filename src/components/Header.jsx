@@ -29,11 +29,16 @@ const Header = () => {
           <Link to="/about">
             <li className=" text-slate-600 hover:underline cursor-pointer">About</li>
           </Link>
-          <Link to="/sign-in">
-            {currentUser ?
-              (<img src={currentUser.avatar} className="w-7 h-7 object-cover rounded-full" alt="avatar" />) :
-              <li className=" text-slate-600 hover:underline cursor-pointer">Sign In</li>}
-          </Link>
+
+          {currentUser ?
+            (<Link to='/profile'>
+              <img src={currentUser.avatar} className="w-7 h-7 object-cover rounded-full" alt="avatar" />
+            </Link>) :
+            (<Link to="/sign-in">
+              <li className=" text-slate-600 hover:underline cursor-pointer">Sign In</li>
+            </Link>)
+          }
+
         </ul>
       </div>
     </div>
