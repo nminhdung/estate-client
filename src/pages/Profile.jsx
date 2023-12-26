@@ -7,10 +7,13 @@ import {
   updateFailed,
   deleteUserPending,
   deleteSuccess,
-  deleteFailed
+  deleteFailed,
+  signOutPending,
+  signOutSuccess,
+  signOutFailed
 } from '../redux/user/userSlice.js';
 import { app } from '../firebase';
-import { updateUserAPI, deleteUserAPI } from '../apis/index.js';
+import { updateUserAPI, deleteUserAPI, signOutAPI } from '../apis/index.js';
 
 
 const Profile = () => {
@@ -84,6 +87,15 @@ const Profile = () => {
       dispatch(updateFailed('Can\'t not update with some problems'));
     }
   };
+  const handleSignout = async () => {
+    try {
+      dispatch(signOutPending());
+      const res = await signOutAPI();
+      dispatch(signOutSuccess());
+    } catch (error) {
+      dispatch(signOutFailed('Can not sign out with some problems'));
+    }
+  };
   useEffect(() => {
     if (file) {
       handleFileUpload(file);
@@ -142,7 +154,7 @@ const Profile = () => {
       </form>
       <div className='flex items-center justify-between mt-5'>
         <span className='text-red-600 cursor-pointer text-[16px]' onClick={handleDeleteUser}>Delete Account?</span>
-        <span className='text-red-600 cursor-pointer text-[16px]'>Sign out</span>
+        <span className='text-red-600 cursor-pointer text-[16px]' onClick={handleSignout}>Sign out</span>
       </div>
       <p className='text-red-700 mt-5'>{error ? error : ''}</p>
       <p className='text-green-600'>{successUpdate ? 'Update successfully' : ''}</p>

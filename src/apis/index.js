@@ -41,3 +41,10 @@ export const deleteUserAPI = async (userId) => {
   });
   return response.data;
 };
+export const signOutAPI = async () => {
+  const response = await axiosIntansce({
+    url: '/auth/signout',
+    method: 'get'
+  });
+  return response.data;
+};
