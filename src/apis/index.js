@@ -48,3 +48,11 @@ export const signOutAPI = async () => {
   });
   return response.data;
 };
+export const createListingAPI = async (data) => {
+  const response = await axiosIntansce({
+    url: '/listing/create',
+    method: 'post',
+    data
+  });
+  return response.data;
+};
