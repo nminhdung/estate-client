@@ -3,8 +3,8 @@ let apiRoot = 'http://localhost:3000';
 export const listOption = [
   {
     id: 1,
-    value:'sell',
-    name: 'sell'
+    value:'sale',
+    name: 'sale'
   },
   {
     id: 2,
