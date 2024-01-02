@@ -70,3 +70,18 @@ export const deleteListingAPI = async (listingId) => {
   });
   return response.data;
 };
+export const getListingAPI = async (listingId) => {
+  const response = await axiosIntansce({
+    url: `/listing/get-listing/${listingId}`,
+    method: 'get'
+  });
+  return response.data;
+};
+export const updateListingAPI = async (listingId, data) => {
+  const response = await axiosIntansce({
+    url: `/listing/update/${listingId}`,
+    method: 'put',
+    data
+  });
+  return response.data;
+};
