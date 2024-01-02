@@ -14,7 +14,7 @@ import {
 } from '../redux/user/userSlice.js';
 import { Link } from 'react-router-dom';
 import { app } from '../firebase';
-import { updateUserAPI, deleteUserAPI, signOutAPI } from '../apis/index.js';
+import { updateUserAPI, deleteUserAPI, signOutAPI, getListingsByUser } from '../apis/index.js';
 
 
 const Profile = () => {
@@ -26,6 +26,8 @@ const Profile = () => {
   const [fileUploadError, setFileUploadError] = useState(false);
   const [formData, setFormData] = useState({});
   const [successUpdate, setSuccesUpdate] = useState(false);
+  const [showListingsError, setShowListingsError] = useState(false);
+  const [userListings, setUserListings] = useState([]);
   console.log('🚀 ~ file: Profile.jsx:14 ~ Profile ~ formData:', formData);
   //firebase storage
   // allow read;
@@ -97,6 +99,18 @@ const Profile = () => {
       dispatch(signOutFailed('Can not sign out with some problems'));
     }
   };
+  const handleShowListings = async () => {
+    try {
+      const res = await getListingsByUser(currentUser._id);
+      if (!res.success) {
+        setShowListingsError(true);
+        return;
+      }
+      setUserListings(res.result);
+    } catch (error) {
+      setShowListingsError(true);
+    }
+  };
   useEffect(() => {
     if (file) {
       handleFileUpload(file);
@@ -162,6 +176,35 @@ const Profile = () => {
       </div>
       <p className='text-red-700 mt-5'>{error ? error : ''}</p>
       <p className='text-green-600'>{successUpdate ? 'Update successfully' : ''}</p>
+      <button onClick={handleShowListings} className='text-green-700 w-full'>
+        Show listings
+      </button>
+      <p className='text-red-700 mt-5'>{showListingsError ? 'Error showing listings' : ''}</p>
+      {userListings && userListings.length > 0 &&
+      <div className='flex flex-col gap-4'>
+        <h1 className='text-center mt -7 text-2xl font-semibold'>Your Listings</h1>
+        {
+          userListings?.map((listing) => {
+            return (
+              <div key={listing._id} className='border flex justify-between items-center p-3 gap-2'>
+                <Link to={`/listing/${listing._id}`}>
+                  <img src={listing.imageURLs[0]} alt="listing url" className='w-16 h-16 object-cover' />
+                </Link>
+                <Link className='flex-1' to={`/listing/${listing._id}`}>
+                  <p className='text-slate-700 font-semibold capitalize hover:underline truncate'>{listing.name}</p>
+                </Link>
+                <div className='flex flex-col items-center'>
+                  <button className='text-red-700 uppercase hover:underline'>Delete</button>
+                  <button className='text-green-700 uppercase hover:underline'>Edit</button>
+                </div>
+              </div>
+            )
+            ;
+          })
+        }
+      </div>
+
+      }
     </div>
   );
 };
