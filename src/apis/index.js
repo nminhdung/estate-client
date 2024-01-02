@@ -63,3 +63,10 @@ export const createListingAPI = async (data) => {
   });
   return response.data;
 };
+export const deleteListingAPI = async (listingId) => {
+  const response = await axiosIntansce({
+    url: `/listing/delete/${listingId}`,
+    method: 'delete'
+  });
+  return response.data;
+};
