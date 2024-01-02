@@ -41,6 +41,13 @@ export const deleteUserAPI = async (userId) => {
   });
   return response.data;
 };
+export const getListingsByUser = async (userId) => {
+  const response = await axiosIntansce({
+    url:`/user/listings/${userId}`,
+    method:'get'
+  });
+  return response.data;
+};
 export const signOutAPI = async () => {
   const response = await axiosIntansce({
     url: '/auth/signout',
