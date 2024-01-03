@@ -4,12 +4,10 @@ import { getListingAPI } from '../apis';
 import { useParams } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
-import SwiperCore from 'swiper';
 import 'swiper/css/bundle';
 
 
 const Listing = () => {
-  SwiperCore.use([Navigation]);
   const [listingData, setListingData] = useState({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -41,7 +39,7 @@ const Listing = () => {
       {error && <p className="text-center my-7 text-2xl text-red-500">Something went wrong!!!</p>}
       {listingData && !loading && !error && (
         <>
-          <Swiper navigation>
+          <Swiper modules={[Navigation]} navigation={true}>
             {listingData?.imageURLs?.map((url, index) => {
               return <SwiperSlide key={url}>
                 <div className="h-[550px] w-full" >
