@@ -4,6 +4,9 @@ import { getListingAPI } from '../apis';
 import { useParams } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
+import { IoLocationOutline } from 'react-icons/io5';
+import { FaBed } from 'react-icons/fa6';
+import { FaBath, FaParking, FaChair } from 'react-icons/fa';
 import 'swiper/css/bundle';
 
 
@@ -12,7 +15,7 @@ const Listing = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const params = useParams();
-
+  console.log(listingData);
   const fetchListingDetails = async () => {
     try {
       setLoading(true);
@@ -49,6 +52,58 @@ const Listing = () => {
               </SwiperSlide>;
             })}
           </Swiper>
+          <div className='w-[1200px]  mx-auto px-3 md:px-0 flex flex-col gap-4 my-7'>
+            <h1 className='font-semibold text-2xl'>
+              {listingData?.name} - ${' '}
+              {listingData.offer
+                ? listingData?.discountPrice?.toLocaleString('en-us')
+                : listingData?.price?.toLocaleString('en-us')}
+              {listingData.type === 'rent' && ' / month'}
+            </h1>
+            <div className='flex items-center gap-2'>
+              <IoLocationOutline color={'green'} />
+              <p className='text-base text-slate-500'>{listingData?.address}</p>
+            </div>
+            <div className='flex items-center gap-2'>
+              <p className='capitalize text-white px-3 py-1 max-w-[200px] w-full  bg-red-600 rounded-md text-center'>
+                {listingData?.type === 'rent' ? 'for rent' : 'for sale'}
+              </p>
+              {listingData?.offer &&
+                                <p className='capitalize text-white px-3 py-1 max-w-[200px] w-full  bg-green-600 rounded-md text-center'>
+                                    $ {+listingData.price - +listingData.discountPrice} discount
+                                </p>}
+            </div>
+            <div className=''>
+              <span className='font-semibold text-black'>Description - </span>
+              <span className='text-slate-600 text-justify'> {listingData?.description}</span>
+            </div>
+            <div className='flex gap-4 items-centered'>
+              <p className="flex items-center gap-2">
+                <FaBed color={'green'} size={20} />
+                <span className='text-green-600 font-semibold'>
+                  {listingData.bedrooms > 1 ? `${listingData.bedrooms} beds` : `${listingData.bedrooms} bed`}
+                </span>
+              </p>
+              <p className="flex items-center gap-2">
+                <FaBath color={'green'} size={20} />
+                <span className='text-green-600 font-semibold'>
+                  {listingData.bathrooms > 1 ? `${listingData.bathrooms} baths` : `${listingData.bathrooms} bath`}
+                </span>
+              </p>
+              <p className="flex items-center gap-2">
+                <FaParking color={`${listingData.parking ? 'green':'black' }`} size={20} />
+                <span className={`${listingData?.parking ? 'text-green-600':'text-black'} font-semibold`}>
+                  {listingData?.parking ? 'Parking spot' : 'No parking'}
+                </span>
+              </p>
+              <p className="flex items-center gap-2">
+                <FaChair color={`${listingData.furnished ? 'green':'black' }`} size={20} />
+                <span className={`${listingData?.furnished ? 'text-green-600':'text-black'} font-semibold`}>
+                  {listingData?.furnished ? 'Furnished' : 'Unfurnished'}
+                </span>
+              </p>
+            </div>
+          </div>
         </>
       )}
     </div>
