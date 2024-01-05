@@ -7,15 +7,19 @@ import { Navigation } from 'swiper/modules';
 import { IoLocationOutline } from 'react-icons/io5';
 import { FaBed } from 'react-icons/fa6';
 import { FaBath, FaParking, FaChair } from 'react-icons/fa';
+import { useSelector } from 'react-redux';
 import 'swiper/css/bundle';
+import Contact from '../components/Contact';
 
 
 const Listing = () => {
   const [listingData, setListingData] = useState({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+  const [contact, setContact] = useState(false);
   const params = useParams();
-  console.log(listingData);
+  const { currentUser } = useSelector(state => state.user);
+
   const fetchListingDetails = async () => {
     try {
       setLoading(true);
@@ -69,9 +73,9 @@ const Listing = () => {
                 {listingData?.type === 'rent' ? 'for rent' : 'for sale'}
               </p>
               {listingData?.offer &&
-                                <p className='capitalize text-white px-3 py-1 max-w-[200px] w-full  bg-green-600 rounded-md text-center'>
-                                    $ {+listingData.price - +listingData.discountPrice} discount
-                                </p>}
+                <p className='capitalize text-white px-3 py-1 max-w-[200px] w-full  bg-green-600 rounded-md text-center'>
+                  $ {+listingData.price - +listingData.discountPrice} discount
+                </p>}
             </div>
             <div className=''>
               <span className='font-semibold text-black'>Description - </span>
@@ -91,18 +95,27 @@ const Listing = () => {
                 </span>
               </p>
               <p className="flex items-center gap-2">
-                <FaParking color={`${listingData.parking ? 'green':'black' }`} size={20} />
-                <span className={`${listingData?.parking ? 'text-green-600':'text-black'} font-semibold`}>
+                <FaParking color={`${listingData.parking ? 'green' : 'black'}`} size={20} />
+                <span className={`${listingData?.parking ? 'text-green-600' : 'text-black'} font-semibold`}>
                   {listingData?.parking ? 'Parking spot' : 'No parking'}
                 </span>
               </p>
               <p className="flex items-center gap-2">
-                <FaChair color={`${listingData.furnished ? 'green':'black' }`} size={20} />
-                <span className={`${listingData?.furnished ? 'text-green-600':'text-black'} font-semibold`}>
+                <FaChair color={`${listingData.furnished ? 'green' : 'black'}`} size={20} />
+                <span className={`${listingData?.furnished ? 'text-green-600' : 'text-black'} font-semibold`}>
                   {listingData?.furnished ? 'Furnished' : 'Unfurnished'}
                 </span>
               </p>
             </div>
+            {currentUser && currentUser._id !== listingData?.userRef && !contact && (
+              <button
+                onClick={() => setContact(true)}
+                className='bg-slate-700 p-3 rounded-lg  text-white uppercase hover:opacity-95'
+              >
+                Contact landlord
+              </button>
+            )}
+            {contact && <Contact listingData={listingData} />}
           </div>
         </>
       )}
