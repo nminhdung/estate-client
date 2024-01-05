@@ -48,6 +48,13 @@ export const getListingsByUser = async (userId) => {
   });
   return response.data;
 };
+export const getUser = async() => {
+  const response = await axiosIntansce({
+    url:'/user/get-user',
+    method:'get'
+  });
+  return response.data;
+};
 export const signOutAPI = async () => {
   const response = await axiosIntansce({
     url: '/auth/signout',
