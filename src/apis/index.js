@@ -84,6 +84,13 @@ export const getListingAPI = async (listingId) => {
   });
   return response.data;
 };
+export const getListingsAPI = async (searchQuery) => {
+  const response = await axiosIntansce({
+    url: `/listing/get?${searchQuery}`,
+    method: 'get'
+  });
+  return response.data;
+};
 export const updateListingAPI = async (listingId, data) => {
   const response = await axiosIntansce({
     url: `/listing/update/${listingId}`,
