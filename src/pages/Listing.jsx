@@ -60,7 +60,7 @@ const Listing = () => {
             <h1 className='font-semibold text-2xl'>
               {listingData?.name} - ${' '}
               {listingData.offer
-                ? listingData?.discountPrice?.toLocaleString('en-us')
+                ? (+listingData.price - +listingData.discountPrice).toLocaleString('en-us')
                 : listingData?.price?.toLocaleString('en-us')}
               {listingData.type === 'rent' && ' / month'}
             </h1>
@@ -74,7 +74,7 @@ const Listing = () => {
               </p>
               {listingData?.offer &&
                 <p className='capitalize text-white px-3 py-1 max-w-[200px] w-full  bg-green-600 rounded-md text-center'>
-                  $ {+listingData.price - +listingData.discountPrice} discount
+                  $ {+listingData.price - +listingData.discountPrice} OFF
                 </p>}
             </div>
             <div className=''>

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getListingsAPI } from '../apis';
+import ListingItem from '../components/ListingItem';
 
 
 const Search = () => {
@@ -14,7 +15,7 @@ const Search = () => {
     sort: 'createdAt',
     order: 'desc'
   });
-  const [listings, setListings]=useState([]);
+  const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const handleChange = (e) => {
@@ -45,7 +46,7 @@ const Search = () => {
     navigate(`/search?${searchQuery}`);
   };
   console.log(listings);
-  const fetchListings = async(searchQuery) => {
+  const fetchListings = async (searchQuery) => {
     setLoading(true);
     const res = await getListingsAPI(searchQuery);
     if (!res.success) {
@@ -65,12 +66,12 @@ const Search = () => {
     const orderFromUrl = urlParams.get('order');
     if (
       searchTermFromUrl ||
-            typeFromUrl ||
-            parkingFromUrl ||
-            furnishedFromUrl ||
-            offerFromUrl ||
-            sortFromUrl ||
-            orderFromUrl
+      typeFromUrl ||
+      parkingFromUrl ||
+      furnishedFromUrl ||
+      offerFromUrl ||
+      sortFromUrl ||
+      orderFromUrl
     ) {
       setFilterSearchData({
         searchTerm: searchTermFromUrl || '',
@@ -182,12 +183,19 @@ const Search = () => {
           <button
             type='submit'
             className='bg-slate-700 uppercase text-white hover:opacity-95 p-3 rounded-lg'>
-                        Search
+            Search
           </button>
         </form>
       </div>
-      <div className=''>
+      <div className='flex-1'>
         <h1 className='font-semibold text-3xl border-b p-3 text-slate-700 mt-5'>Listing results</h1>
+        <div className='p-7 grid xl:grid-cols-3 gap-4'>
+          {!loading && listings.length === 0 && (<p className='text-xl text-red-500'>No listing found</p>)}
+          {loading && <p className='text-slate-700 text-center text-xl w-full'>Loading...</p>}
+          {!loading && listings && listings.map(listing => {
+            return <ListingItem key={listing._id} listing={listing} />;
+          })}
+        </div>
       </div>
     </div>
   );
