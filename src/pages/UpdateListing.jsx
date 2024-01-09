@@ -262,7 +262,7 @@ const UpdateListing = () => {
                 className='p-3 border border-gray-400 rounded-lg'
                 id="price"
                 min='50'
-                max='1000'
+                max='1000000'
                 required
                 onChange={handleChange}
                 value={formData.price}
@@ -278,7 +278,7 @@ const UpdateListing = () => {
                 className='p-3 border border-gray-400 rounded-lg'
                 id="discountPrice"
                 min='0'
-                max='1000'
+                max='100000'
                 required
                 onChange={handleChange}
                 value={formData.discountPrice}

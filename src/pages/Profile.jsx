@@ -211,7 +211,7 @@ const Profile = () => {
                   <Link to={`/listing/${listing._id}`}>
                     <img src={listing.imageURLs[0]} alt="listing url" className='w-16 h-16 object-cover' />
                   </Link>
-                  <Link className='flex-1' to={`/listing/${listing._id}`}>
+                  <Link className='flex-1  line-clamp-1' to={`/listing/${listing._id}`}>
                     <p className='text-slate-700 font-semibold capitalize hover:underline truncate'>{listing.name}</p>
                   </Link>
                   <div className='flex flex-col items-center'>
