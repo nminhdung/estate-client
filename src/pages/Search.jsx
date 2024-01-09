@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { getListingsAPI } from '../apis';
 
 
 const Search = () => {
@@ -13,6 +14,8 @@ const Search = () => {
     sort: 'createdAt',
     order: 'desc'
   });
+  const [listings, setListings]=useState([]);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const handleChange = (e) => {
     const { id, value, checked } = e.target;
@@ -40,6 +43,16 @@ const Search = () => {
 
     const searchQuery = urlParams.toString();
     navigate(`/search?${searchQuery}`);
+  };
+  console.log(listings);
+  const fetchListings = async(searchQuery) => {
+    setLoading(true);
+    const res = await getListingsAPI(searchQuery);
+    if (!res.success) {
+      setLoading(false);
+    }
+    setLoading(false);
+    setListings(res.result);
   };
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
@@ -69,6 +82,8 @@ const Search = () => {
         order: orderFromUrl || 'desc'
       });
     }
+    const searchQuery = urlParams.toString();
+    fetchListings(searchQuery);
   }, [location.search]);
   return (
     <div className='flex flex-col md:flex-row gap-2'>
