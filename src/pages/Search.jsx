@@ -17,6 +17,7 @@ const Search = () => {
   });
   const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [showMore, setShowMore] = useState(false);
   const navigate = useNavigate();
   const handleChange = (e) => {
     const { id, value, checked } = e.target;
@@ -48,12 +49,32 @@ const Search = () => {
   console.log(listings);
   const fetchListings = async (searchQuery) => {
     setLoading(true);
+    setShowMore(false);
     const res = await getListingsAPI(searchQuery);
     if (!res.success) {
       setLoading(false);
     }
+    if (res.result?.length > 8) {
+      setShowMore(true);
+    }
+    else {
+      setShowMore(false);
+    }
     setLoading(false);
     setListings(res.result);
+
+  };
+  const onShowMoreClick = async () => {
+    const totalListings = listings.length;
+    const startIndex = totalListings;
+    const urlParams = new URLSearchParams(location.search);
+    urlParams.set('startIndex', startIndex);
+    const searchQuery = urlParams.toString();
+    const res = await getListingsAPI(searchQuery);
+    if (res.result.length < 9) {
+      setShowMore(false);
+    }
+    setListings([...listings, ...res.result]);
   };
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
@@ -87,7 +108,7 @@ const Search = () => {
     fetchListings(searchQuery);
   }, [location.search]);
   return (
-    <div className='flex flex-col md:flex-row gap-2'>
+    <div className='flex flex-col md:flex-row gap-2 mb-[100px]'>
       <div className='p-7 border-b-2 md:border-r-2 md:min-h-screen'>
         <form onSubmit={handleSubmit} className='flex flex-col gap-8'>
           <div className='flex gap-1 items-center'>
@@ -195,7 +216,12 @@ const Search = () => {
           {!loading && listings && listings.map(listing => {
             return <ListingItem key={listing._id} listing={listing} />;
           })}
+
         </div>
+        {showMore &&
+          <button onClick={() => onShowMoreClick()} className='text-green-700 hover:underline text-center w-full '>
+            Show more
+          </button>}
       </div>
     </div>
   );
